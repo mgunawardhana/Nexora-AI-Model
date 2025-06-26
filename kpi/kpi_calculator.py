@@ -20,6 +20,7 @@ def calculate_kpi(df: pd.DataFrame):
     # --- 1. Convert 'Daily Working Hours' to a numeric format ---
     # This column will be used for the core calculation.
     actual_hours_col = 'Daily Working Hours'
+    df = df.copy()  # Create a copy to avoid SettingWithCopyWarning
     df['numeric_hours'] = df[actual_hours_col].apply(time_utils.time_to_hours)
 
     # --- 2. Clean data and group by employee ---
@@ -36,9 +37,8 @@ def calculate_kpi(df: pd.DataFrame):
     monthly_report = clean_df.groupby(['First Name', 'Last Name']).agg(agg_logic)
 
     # Rename the aggregated columns for better clarity
-    monthly_report.rename(
-        columns={'numeric_hours': 'total_actual_hours', 'User ID': 'workday_count'},
-        inplace=True
+    monthly_report = monthly_report.rename(
+        columns={'numeric_hours': 'total_actual_hours', 'User ID': 'workday_count'}
     )
 
     # --- 3. Calculate Monthly KPI ---
@@ -49,7 +49,9 @@ def calculate_kpi(df: pd.DataFrame):
     # Calculate the raw KPI (actual hours / scheduled hours)
     # Avoid division by zero if an employee has 0 scheduled hours
     monthly_report['monthly_kpi'] = monthly_report['total_actual_hours'] / monthly_report['total_scheduled_hours']
-    monthly_report['monthly_kpi'].fillna(0, inplace=True)  # If division by zero, KPI is 0
+
+    # Fill NaN values (if division by zero) with 0 - using proper assignment
+    monthly_report['monthly_kpi'] = monthly_report['monthly_kpi'].fillna(0)
 
     # --- 4. Cap the KPI at a maximum of 1.0 ---
     # This ensures the KPI represents completion percentage without exceeding 100%.

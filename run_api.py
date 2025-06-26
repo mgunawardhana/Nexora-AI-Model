@@ -13,12 +13,12 @@ def main():
     # Get the directory where this script is located
     script_dir = Path(__file__).parent
 
-    print("🚀 Starting Employee KPI Calculator API...")
-    print(f"📁 Project Directory: {script_dir}")
-    print(f"📊 CSV File Path: {script_dir}/dataset/employee_attendance_report_20250626_085838.csv")
-    print("🌐 API will be available at: http://localhost:8000")
-    print("📚 API Documentation: http://localhost:8000/docs")
-    print("🔍 Interactive API Explorer: http://localhost:8000/redoc")
+    print(" Starting Employee KPI Calculator API...")
+    print(f" Project Directory: {script_dir}")
+    print(f" CSV File Path: {script_dir}/dataset/employee_attendance_report_20250626_085838.csv")
+    print(" API will be available at: http://localhost:8000")
+    print(" API Documentation: http://localhost:8000/docs")
+    print(" Interactive API Explorer: http://localhost:8000/redoc")
     print("\n" + "=" * 60)
 
     # Start the server

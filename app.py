@@ -1,3 +1,5 @@
+# project_root/app.py
+
 import os
 import sys
 from pathlib import Path
@@ -8,19 +10,32 @@ from datetime import datetime
 
 from fastapi import FastAPI, HTTPException
 from fastapi.responses import StreamingResponse
+from pydantic import BaseModel
 
-# Add the project root to Python path to import the kpi package
+# Add the project root to Python path to import the kpi and huggingface packages
 project_root = Path(__file__).parent
 sys.path.append(str(project_root))
 
 # Import configuration and functions
 import config
 from kpi import load_dataframe, calculate_kpi
+from huggingface.sentence_similarity import get_sentence_similarity
+from huggingface.question_answering import get_question_answer
 
 app = FastAPI(title=config.API_TITLE, description=config.API_DESCRIPTION, version=config.API_VERSION)
 
 # Use CSV file path from configuration
 CSV_FILE_PATH = str(config.CSV_FILE_PATH)
+
+
+class SentenceSimilarityRequest(BaseModel):
+    source_sentence: str
+    sentences: list[str]
+
+
+class QuestionAnsweringRequest(BaseModel):
+    question: str
+    context: str
 
 
 @app.get("/")
@@ -38,6 +53,30 @@ async def health_check():
     csv_exists = os.path.exists(CSV_FILE_PATH)
     return {"status": "healthy" if csv_exists else "warning", "csv_file_available": csv_exists,
             "csv_path": CSV_FILE_PATH}
+
+
+@app.post("/sentence-similarity")
+async def sentence_similarity(request: SentenceSimilarityRequest):
+    """
+    Endpoint for sentence similarity.
+    """
+    try:
+        result = get_sentence_similarity(request.source_sentence, request.sentences)
+        return {"status": "success", "result": result}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+@app.post("/question-answering")
+async def question_answering(request: QuestionAnsweringRequest):
+    """
+    Endpoint for question answering.
+    """
+    try:
+        result = get_question_answer(request.question, request.context)
+        return {"status": "success", "result": result}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
 
 
 @app.get("/calculate-kpi")

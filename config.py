@@ -8,24 +8,11 @@ from pathlib import Path
 # Get the project root directory
 PROJECT_ROOT = Path(__file__).parent
 
-# CSV file configuration
-# Update this path to match your CSV file location
-CSV_FILE_PATH = PROJECT_ROOT / "dataset" / "employee_attendance_report_20250626_085838.csv"
-
 # HR Dataset configuration
 HR_DATASET_PATH = PROJECT_ROOT / "dataset" / "WA_Fn-UseC_-HR-Employee-Attrition.csv"
 
-# Alternative: You can also set the path as an environment variable
-# CSV_FILE_PATH = os.getenv("CSV_FILE_PATH", str(PROJECT_ROOT / "dataset" / "employee_attendance_report_20250626_085838.csv"))
-# HR_DATASET_PATH = os.getenv("HR_DATASET_PATH", str(PROJECT_ROOT / "dataset" / "WA_Fn-UseC_-HR-Employee-Attrition.csv"))
-
 # Model configuration
 MODELS_DIR = PROJECT_ROOT / "models" / "trained_models"
-
-# API configuration
-API_TITLE = "Employee KPI Calculator & HR Performance Prediction API"
-API_DESCRIPTION = "API for calculating monthly workload KPI and predicting employee performance ratings from CSV data"
-API_VERSION = "2.0.0"
 
 # Server configuration
 DEFAULT_HOST = "0.0.0.0"

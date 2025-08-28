@@ -5,7 +5,6 @@ from sklearn.preprocessing import LabelEncoder, StandardScaler
 from sklearn.metrics import accuracy_score, classification_report
 import xgboost as xgb
 import pickle
-import os
 from pathlib import Path
 from typing import Dict, List, Tuple, Optional
 

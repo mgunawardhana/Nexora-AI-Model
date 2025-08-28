@@ -18,8 +18,7 @@ from models.hr_model import HRPerformanceModel
 
 app = FastAPI(title=config.API_TITLE, description=config.API_DESCRIPTION, version=config.API_VERSION)
 
-# Use CSV file path from configuration
-CSV_FILE_PATH = str(config.CSV_FILE_PATH)
+# Use HR dataset path from configuration
 HR_DATASET_PATH = str(config.HR_DATASET_PATH)
 
 # Initialize HR Model
@@ -93,16 +92,18 @@ async def root():
 @app.get("/health")
 async def health_check():
     """Health check endpoint"""
-    # Check if CSV files exist
-    csv_exists = os.path.exists(CSV_FILE_PATH)
+    # Check if HR dataset file exists
     hr_dataset_exists = os.path.exists(HR_DATASET_PATH)
 
     # Check HR model status
     model_info = hr_model.get_model_info()
 
-    return {"status": "healthy" if csv_exists else "warning", "kpi_csv_available": csv_exists,
-        "kpi_csv_path": CSV_FILE_PATH, "hr_dataset_available": hr_dataset_exists, "hr_dataset_path": HR_DATASET_PATH,
-        "hr_model_status": model_info["model_info"]}
+    return {
+        "status": "healthy" if hr_dataset_exists else "warning",
+        "hr_dataset_available": hr_dataset_exists,
+        "hr_dataset_path": HR_DATASET_PATH,
+        "hr_model_status": model_info["model_info"]
+    }
 
 
 # === HR MODEL ENDPOINTS ===
@@ -140,6 +141,9 @@ async def predict_hr_performance(request: HRPredictionRequest):
 
         if result["status"] == "success":
             result["employee_name"] = employee_name
+
+
+        print(result)
 
         return result
 

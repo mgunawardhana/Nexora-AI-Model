@@ -5,6 +5,11 @@ Configuration file for the Employee KPI Calculator API
 import os
 from pathlib import Path
 
+# API Configuration
+API_TITLE = "Nexora AI API"
+API_DESCRIPTION = "An API for HR Performance Prediction and Employee KPI Calculation."
+API_VERSION = "2.0.0"
+
 # Get the project root directory
 PROJECT_ROOT = Path(__file__).parent
 
